@@ -1,7 +1,10 @@
 ﻿name: PPWCode.Util.AppConfigTemplate
 description: MSBuild targets to use templates for App.config and Web.config
 build: files;
-  file=build -> src\*;
+  file=build -> src\AppConfigTemplate.targets;
+  file=. -> NOTICE;
+  file=. -> LICENSE;
+  file=. -> README;
 
 use-symlinks: false
 
