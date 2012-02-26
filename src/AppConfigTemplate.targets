@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <!-- configurations -->
+    <AppConfigTemplate-ConfigDirectory Condition="$(AppConfigTemplate-ConfigDirectory) == '' " >$(MSBuildProjectDirectory)</AppConfigTemplate-ConfigDirectory>
+    <AppConfigTemplate-ConfigFile>$(AppConfigTemplate-ConfigDirectory)\configuration.xml</AppConfigTemplate-ConfigFile>
+    <AppConfigTemplate-UserConfigFile>$(AppConfigTemplate-ConfigDirectory)\configuration.user.xml</AppConfigTemplate-UserConfigFile>
+    <AppConfigTemplate-TemplateDirectory Condition="$(AppConfigTemplate-TemplateDirectory) == '' " >$(MSBuildProjectDirectory)</AppConfigTemplate-TemplateDirectory>
+    <AppConfigTemplate-UserTempFile>$(AppConfigTemplate-TemplateDirectory)\template.user.xml</AppConfigTemplate-UserTempFile>
+    <AppConfigTemplate-TemplateFile>$(AppConfigTemplate-TemplateDirectory)\template.xml</AppConfigTemplate-TemplateFile>
+
+    <!-- resulting file -->
+    <AppConfigTemplate-FinalFile Condition="$(AppConfigTemplate-FinalFile) == '' " >$(MSBuildProjectDirectory)\App.config</AppConfigTemplate-FinalFile>
+
+    <!-- specific config file -->
+    <AppConfigTemplate-SpecificConfigFile Condition="($(AppConfigTemplate-SpecificConfigFile) == '') And ($(ACTCONFIG) != '') ">$(AppConfigTemplate-ConfigDirectory)\configuration.$(ACTCONFIG).xml</AppConfigTemplate-SpecificConfigFile>
+    <AppConfigTemplate-SpecificConfigFile Condition="$(AppConfigTemplate-SpecificConfigFile) == '' And $(AppConfigTemplate-SpecificConfig) != '' ">$(AppConfigTemplate-ConfigDirectory)\configuration.$(AppConfigTemplate-SpecificConfig).xml</AppConfigTemplate-SpecificConfigFile>
+   </PropertyGroup>
+
+  <!-- file to work on for default generate config files -->
+  <Choose>
+    <When Condition="($(AppConfigTemplate-SpecificConfigFile) == '' ) And Exists('$(AppConfigTemplate-UserConfigFile)')">
+      <PropertyGroup>
+        <AppConfigTemplate-FileToWorkOn>$(AppConfigTemplate-UserTempFile)</AppConfigTemplate-FileToWorkOn>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <AppConfigTemplate-FileToWorkOn>$(AppConfigTemplate-TemplateFile)</AppConfigTemplate-FileToWorkOn>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  
+  <!-- which configuration to use for default config files -->
+  <Choose>
+    <When Condition="$(AppConfigTemplate-SpecificConfigFile) == '' ">
+      <PropertyGroup>
+        <AppConfigTemplate-ConfigFileToUse>$(AppConfigTemplate-ConfigFile)</AppConfigTemplate-ConfigFileToUse>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <AppConfigTemplate-ConfigFileToUse>$(AppConfigTemplate-SpecificConfigFile)</AppConfigTemplate-ConfigFileToUse>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Generate the user template file -->
+  <Target Name="GenerateUserTempFile" Condition="($(AppConfigTemplate-SpecificConfigFile) == '' ) And Exists('$(AppConfigTemplate-UserConfigFile)')">
+    <XmlQuery XmlFileName="$(AppConfigTemplate-UserConfigFile)" XPath="//variables[@env='$(Configuration)' and @use='true']/var">
+      <Output TaskParameter="Values" ItemName="UserConfigurationValues" />
+    </XmlQuery>
+    <ItemGroup>
+      <UserTokens Include="%(UserConfigurationValues.name)">
+        <ReplacementValue>%(UserConfigurationValues.value)</ReplacementValue>
+      </UserTokens>
+    </ItemGroup>
+    <TemplateFile Template="$(AppConfigTemplate-TemplateFile)" OutputFileName="$(AppConfigTemplate-UserTempFile)" Tokens="@(UserTokens)" />
+  </Target>
+
+  <!-- Delete the user temp file -->
+  <Target Name="DeleteUserTempFile" Condition="Exists('$(AppConfigTemplate-UserTempFile)')">
+    <Delete Files="$(AppConfigTemplate-UserTempFile)" />
+  </Target>
+  
+  <!-- Generate config files default -->
+  <Target Name="GenerateConfigFilesDefault">
+    <XmlQuery XmlFileName="$(AppConfigTemplate-ConfigFileToUse)" XPath="//variables[@env='$(Configuration)']/var">
+      <Output TaskParameter="Values" ItemName="ConfigurationValues" />
+    </XmlQuery>
+    <ItemGroup>
+      <DefaultTokens Include="%(ConfigurationValues.name)">
+        <ReplacementValue>%(ConfigurationValues.value)</ReplacementValue>
+      </DefaultTokens>
+    </ItemGroup>
+    <TemplateFile Template="$(AppConfigTemplate-FileToWorkOn)" OutputFileName="$(AppConfigTemplate-FinalFile)" Tokens="@(DefaultTokens)" />
+  </Target>
+
+  <!-- print configuration -->
+  <Target Name="PrintConfiguration">
+    <Message Text="AppConfigTemplate-ConfigDirectory: $(AppConfigTemplate-ConfigDirectory)" />
+    <Message Text="AppConfigTemplate-ConfigFile: $(AppConfigTemplate-ConfigFile)" />
+    <Message Text="AppConfigTemplate-UserConfigFile: $(AppConfigTemplate-UserConfigFile)" />
+    <Message Text="AppConfigTemplate-TemplateDirectory: $(AppConfigTemplate-TemplateDirectory)" />
+    <Message Text="AppConfigTemplate-UserTempFile: $(AppConfigTemplate-UserTempFile)" />
+    <Message Text="AppConfigTemplate-TemplateFile: $(AppConfigTemplate-TemplateFile)" />
+    <Message Text="AppConfigTemplate-FinalFile: $(AppConfigTemplate-FinalFile)" />
+    <Message Text="AppConfigTemplate-SpecificConfigFile: $(AppConfigTemplate-SpecificConfigFile)" />
+    <Message Text="AppConfigTemplate-FileToWorkOn: $(AppConfigTemplate-FileToWorkOn)" />
+    <Message Text="AppConfigTemplate-ConfigFileToUse: $(AppConfigTemplate-ConfigFileToUse)" />
+  </Target>
+  
+  <Target Name="AppConfigTemplate">
+    <CallTarget Targets="PrintConfiguration" />
+    <CallTarget Targets="GenerateUserTempFile" />
+    <CallTarget Targets="GenerateConfigFilesDefault" />
+    <CallTarget Targets="DeleteUserTempFile" />
+  </Target>
+  
+  <PropertyGroup>
+    <BuildDependsOn>
+        AppConfigTemplate;
+        $(BuildDependsOn);
+    </BuildDependsOn>
+  </PropertyGroup>
+</Project>

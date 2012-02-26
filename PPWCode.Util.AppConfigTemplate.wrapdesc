@@ -1,0 +1,16 @@
+﻿name: PPWCode.Util.AppConfigTemplate
+description: MSBuild targets to use templates for App.config and Web.config
+build: files;
+  file=build -> src\*;
+
+use-symlinks: false
+
+# anchored because it always needs to be available
+#   on predetermined location
+anchored: true
+
+# defaults
+depends: openwrap = 2.0 anchored content
+
+# open source
+depends: MSBuild.Community.Tasks = 1.2.0
