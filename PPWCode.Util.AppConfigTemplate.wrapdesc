@@ -16,4 +16,4 @@ anchored: true
 depends: openwrap = 2.0 anchored content
 
 # open source
-depends: MSBuild.Community.Tasks = 1.2.0
+depends: MSBuild.Community.Tasks = 1.2

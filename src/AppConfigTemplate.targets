@@ -27,7 +27,7 @@ limitations under the License.
     <AppConfigTemplate-UserConfigFile>$(AppConfigTemplate-ConfigDirectory)\configuration.user.xml</AppConfigTemplate-UserConfigFile>
     <AppConfigTemplate-TemplateDirectory Condition="$(AppConfigTemplate-TemplateDirectory) == '' " >$(MSBuildProjectDirectory)</AppConfigTemplate-TemplateDirectory>
     <AppConfigTemplate-UserTempFile>$(AppConfigTemplate-TemplateDirectory)\template.user.xml</AppConfigTemplate-UserTempFile>
-    <AppConfigTemplate-TemplateFile>$(AppConfigTemplate-TemplateDirectory)\template.xml</AppConfigTemplate-TemplateFile>
+    <AppConfigTemplate-TemplateFile Condition="$(AppConfigTemplate-TemplateFile) == '' " >$(AppConfigTemplate-TemplateDirectory)\template.xml</AppConfigTemplate-TemplateFile>
 
     <!-- resulting file -->
     <AppConfigTemplate-FinalFile Condition="$(AppConfigTemplate-FinalFile) == '' " >$(MSBuildProjectDirectory)\App.config</AppConfigTemplate-FinalFile>
