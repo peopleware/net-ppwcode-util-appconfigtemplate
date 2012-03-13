@@ -22,17 +22,24 @@ limitations under the License.
 
   <PropertyGroup>
     <!-- configurations -->
+
+    <!-- ConfigDirectory: folder that contains configuration files like confiruation.xml, ... -->
     <AppConfigTemplate-ConfigDirectory Condition="$(AppConfigTemplate-ConfigDirectory) == '' " >$(MSBuildProjectDirectory)</AppConfigTemplate-ConfigDirectory>
+    <!-- ConfigFile: location of the base configuration file -->
     <AppConfigTemplate-ConfigFile>$(AppConfigTemplate-ConfigDirectory)\configuration.xml</AppConfigTemplate-ConfigFile>
+    <!-- UserConfigFile: location of the user configuration file -->
     <AppConfigTemplate-UserConfigFile>$(AppConfigTemplate-ConfigDirectory)\configuration.user.xml</AppConfigTemplate-UserConfigFile>
+    <!-- TemplateDirectory: folder that contains the template file -->
     <AppConfigTemplate-TemplateDirectory Condition="$(AppConfigTemplate-TemplateDirectory) == '' " >$(MSBuildProjectDirectory)</AppConfigTemplate-TemplateDirectory>
+    <!-- UserTempFile: temporary file that is used to generate the config file -->
     <AppConfigTemplate-UserTempFile>$(AppConfigTemplate-TemplateDirectory)\template.user.xml</AppConfigTemplate-UserTempFile>
+    <!-- TemplateFile: location of the template -->
     <AppConfigTemplate-TemplateFile Condition="$(AppConfigTemplate-TemplateFile) == '' " >$(AppConfigTemplate-TemplateDirectory)\template.xml</AppConfigTemplate-TemplateFile>
 
-    <!-- resulting file -->
+    <!-- FinalFile: the file that is generated -->
     <AppConfigTemplate-FinalFile Condition="$(AppConfigTemplate-FinalFile) == '' " >$(MSBuildProjectDirectory)\App.config</AppConfigTemplate-FinalFile>
 
-    <!-- specific config file -->
+    <!-- SpecificConfigFile: specific full configuration file -->
     <AppConfigTemplate-SpecificConfigFile Condition="($(AppConfigTemplate-SpecificConfigFile) == '') And ($(ACTCONFIG) != '') ">$(AppConfigTemplate-ConfigDirectory)\configuration.$(ACTCONFIG).xml</AppConfigTemplate-SpecificConfigFile>
     <AppConfigTemplate-SpecificConfigFile Condition="$(AppConfigTemplate-SpecificConfigFile) == '' And $(AppConfigTemplate-SpecificConfig) != '' ">$(AppConfigTemplate-ConfigDirectory)\configuration.$(AppConfigTemplate-SpecificConfig).xml</AppConfigTemplate-SpecificConfigFile>
    </PropertyGroup>
