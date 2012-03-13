@@ -22,23 +22,28 @@ limitations under the License.
 
   <ItemGroup>
     <!-- file to generate -->
-    <FileToGenerate Include="hoefnix">
+    <GenericTemplate-FileToGenerate Include="hoefnix">
        <Template>bindings.template.xml</Template>
-       <Config>config.hoefnix.xml</Config>
+       <Config>configuration.xml</Config>
        <Result>bindings.hoefnix.xml</Result>
-    <FileToGenerate/>
-    <FileToGenerate Include="barometrix">
+    </GenericTemplate-FileToGenerate>
+
+    <GenericTemplate-FileToGenerate Include="barometrix">
        <Template>bindings.template.xml</Template>
-       <Config>config.barometrix.xml</Config>
-       <Result>bindings.hoefnix.xml</Result>
-    <FileToGenerate/>
+       <Config>configuration.xml</Config>
+       <Result>bindings.barometrix.xml</Result>
+    </GenericTemplate-FileToGenerate>
   </ItemGroup>
   
   <!-- Generate config files default -->
-  <Target Name="GenerateConfigFilesDefault">
+  <Target
+        Name="GenerateConfigFiles"
+        Inputs="%(GenericTemplate-FileToGenerate.Template);%(GenericTemplate-FileToGenerate.Config)"
+        Outputs="%(GenericTemplate-FileToGenerate.Result)">
+
     <XmlQuery 
-        XmlFileName="$(AppConfigTemplate-ConfigFileToUse)" 
-        XPath="//variables[@env='$(Configuration)']/var">
+        XmlFileName="%(GenericTemplate-FileToGenerate.Config)" 
+        XPath="//variables[@env='%(GenericTemplate-FileToGenerate.Identity)']/var">
       <Output 
           TaskParameter="Values" 
           ItemName="ConfigurationValues" />
@@ -49,33 +54,31 @@ limitations under the License.
       </DefaultTokens>
     </ItemGroup>
     <TemplateFile 
-        Template="$(AppConfigTemplate-FileToWorkOn)" 
-        OutputFileName="$(AppConfigTemplate-FinalFile)" 
+        Template="%(GenericTemplate-FileToGenerate.Template)" 
+        OutputFileName="%(GenericTemplate-FileToGenerate.Result)" 
         Tokens="@(DefaultTokens)" />
   </Target>
 
   <!-- print configuration -->
-  <Target Name="PrintConfiguration">
-    <Message Text="AppConfigTemplate-ConfigDirectory: $(AppConfigTemplate-ConfigDirectory)" />
-    <Message Text="AppConfigTemplate-ConfigFile: $(AppConfigTemplate-ConfigFile)" />
-    <Message Text="AppConfigTemplate-UserConfigFile: $(AppConfigTemplate-UserConfigFile)" />
-    <Message Text="AppConfigTemplate-TemplateDirectory: $(AppConfigTemplate-TemplateDirectory)" />
-    <Message Text="AppConfigTemplate-UserTempFile: $(AppConfigTemplate-UserTempFile)" />
-    <Message Text="AppConfigTemplate-TemplateFile: $(AppConfigTemplate-TemplateFile)" />
-    <Message Text="AppConfigTemplate-FinalFile: $(AppConfigTemplate-FinalFile)" />
-    <Message Text="AppConfigTemplate-SpecificConfigFile: $(AppConfigTemplate-SpecificConfigFile)" />
-    <Message Text="AppConfigTemplate-FileToWorkOn: $(AppConfigTemplate-FileToWorkOn)" />
-    <Message Text="AppConfigTemplate-ConfigFileToUse: $(AppConfigTemplate-ConfigFileToUse)" />
+  <Target 
+        Name="PrintConfiguration"
+        Inputs="%(GenericTemplate-FileToGenerate.Template);%(GenericTemplate-FileToGenerate.Config)"
+        Outputs="%(GenericTemplate-FileToGenerate.Result)">
+
+    <Message Text="GenericTemplate-FileToGenerate: %(GenericTemplate-FileToGenerate.Identity)" />
+    <Message Text="Template: %(GenericTemplate-FileToGenerate.Template)" />
+    <Message Text="Config:   %(GenericTemplate-FileToGenerate.Config)" />
+    <Message Text="Result:   %(GenericTemplate-FileToGenerate.Result)" />
   </Target>
   
-  <Target Name="AppConfigTemplate">
+  <Target Name="TemplateGeneration">
     <CallTarget Targets="PrintConfiguration" />
-    <CallTarget Targets="GenerateConfigFilesDefault" />
+    <CallTarget Targets="GenerateConfigFiles" />
   </Target>
   
   <PropertyGroup>
     <BuildDependsOn>
-        AppConfigTemplate;
+        TemplateGeneration;
         $(BuildDependsOn);
     </BuildDependsOn>
   </PropertyGroup>
