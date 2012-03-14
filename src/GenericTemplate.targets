@@ -20,20 +20,15 @@ limitations under the License.
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <!-- Example configuration, must be defined in msbuild file -->
+  <!--
   <ItemGroup>
-    <!-- file to generate -->
     <GenericTemplate-FileToGenerate Include="hoefnix">
        <Template>bindings.template.xml</Template>
        <Config>configuration.xml</Config>
        <Result>bindings.hoefnix.xml</Result>
     </GenericTemplate-FileToGenerate>
-
-    <GenericTemplate-FileToGenerate Include="barometrix">
-       <Template>bindings.template.xml</Template>
-       <Config>configuration.xml</Config>
-       <Result>bindings.barometrix.xml</Result>
-    </GenericTemplate-FileToGenerate>
-  </ItemGroup>
+  </ItemGroup> -->
   
   <!-- Generate config files default -->
   <Target
@@ -76,10 +71,4 @@ limitations under the License.
     <CallTarget Targets="GenerateConfigFiles" />
   </Target>
   
-  <PropertyGroup>
-    <BuildDependsOn>
-        TemplateGeneration;
-        $(BuildDependsOn);
-    </BuildDependsOn>
-  </PropertyGroup>
 </Project>
