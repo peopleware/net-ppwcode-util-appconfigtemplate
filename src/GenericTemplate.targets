@@ -23,9 +23,9 @@ limitations under the License.
   <!-- Example configuration, must be defined in msbuild file -->
   <!--
   <ItemGroup>
-    <GenericTemplate-FileToGenerate Include="hoefnix">
+    <GenericTemplate-FileToGenerate Include="config.hoefnix.xml">
        <Template>bindings.template.xml</Template>
-       <Config>configuration.xml</Config>
+       <Config>config.hoefnix.xml</Config>
        <Result>bindings.hoefnix.xml</Result>
     </GenericTemplate-FileToGenerate>
   </ItemGroup> -->
@@ -38,7 +38,7 @@ limitations under the License.
 
     <XmlQuery 
         XmlFileName="%(GenericTemplate-FileToGenerate.Config)" 
-        XPath="//variables[@env='%(GenericTemplate-FileToGenerate.Identity)']/var">
+        XPath="//variables[@env='$(Configuration)']/var">
       <Output 
           TaskParameter="Values" 
           ItemName="ConfigurationValues" />
