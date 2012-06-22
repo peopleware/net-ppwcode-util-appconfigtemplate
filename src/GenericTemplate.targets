@@ -29,7 +29,7 @@ limitations under the License.
        <Result>bindings.hoefnix.xml</Result>
     </GenericTemplate-FileToGenerate>
   </ItemGroup> -->
-  
+
   <!-- Generate config files default -->
   <Target
         Name="GenerateConfigFiles"
