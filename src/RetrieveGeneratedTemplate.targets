@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+Copyright 2012 - $Date: 2008-11-15 23:58:07 +0100 (za, 15 nov 2008) $ by PeopleWare n.v..
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+  -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Example configuration, must be defined in msbuild file -->
+  <!--
+  <ItemGroup>
+    <GeneratedTemplate Include="App.config">
+      <Visible>false</Visible>
+      <Config>user</Config>
+      <Default>localhost</Default>
+      <Project>$(MSBuildProjectDirectory)\..\AppConfigGeneration</Project>
+      <Origin>PPWCode.Test.ConsoleHost.exe.config</Origin>
+      <Destination>App.config</Destination>
+    </GeneratedTemplate>
+  </ItemGroup> -->
+
+  <!-- properties -->
+  <PropertyGroup>
+    <PPW-TemplateConfig Condition="$(PPW-TemplateConfig) == '' " >$(PPWTEMPLATECONFIG)</PPW-TemplateConfig>
+  </PropertyGroup>
+  
+  <!-- print configuration -->
+  <Target 
+        Name="PrintConfiguration"
+        Inputs="%(GeneratedTemplate.Project)\*-%(GeneratedTemplate.Origin)"
+        Outputs="%(GeneratedTemplate.Destination)">
+
+    <Message Text="Project:      %(GeneratedTemplate.Project)" />
+    <Message Text="System:       $(PPW-TemplateConfig)" />
+    <Message Text="Config:       %(GeneratedTemplate.Config)" />
+    <Message Text="Default:      %(GeneratedTemplate.Default)" />
+    <Message Text="Origin:       %(GeneratedTemplate.Origin)" />
+    <Message Text="Destination:  %(GeneratedTemplate.Destination)" />
+  </Target>
+
+  <Target Name="CopyGeneratedTemplate"
+       Inputs="%(GeneratedTemplate.Project)\*-%(GeneratedTemplate.Origin)"
+       Outputs="%(GeneratedTemplate.Destination)">
+
+       <PropertyGroup>
+           <SelectedConfig>$(PPW-TemplateConfig)</SelectedConfig>
+           <SelectedConfig Condition="$(PPW-TemplateConfig) == '' ">%(GeneratedTemplate.Config)</SelectedConfig>
+           <SelectedConfig Condition="$(PPW-TemplateConfig) == '' And !Exists('%(GeneratedTemplate.Project)\$(SelectedConfig)-%(GeneratedTemplate.Origin)')">%(GeneratedTemplate.Default)</SelectedConfig>
+       </PropertyGroup>
+       
+       <Message Text="Selected config: $(SelectedConfig)" />
+       <Message Text="Selected original: %(GeneratedTemplate.Origin)" />
+       <Message Text="Selected template: %(GeneratedTemplate.Destination)" />
+       
+       <Copy   SourceFiles="%(GeneratedTemplate.Project)\$(SelectedConfig)-%(GeneratedTemplate.Origin)"
+               DestinationFiles="%(GeneratedTemplate.Destination)"  />
+  </Target>
+  
+  <Target Name="ReplaceGeneratedTemplates">
+    <CallTarget Targets="PrintConfiguration" />
+    <CallTarget Targets="CopyGeneratedTemplate" />
+  </Target>
+
+</Project>

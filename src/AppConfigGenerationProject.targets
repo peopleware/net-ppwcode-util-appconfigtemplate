@@ -56,11 +56,5 @@ limitations under the License.
     <CallTarget Targets="Clean" />
     <CallTarget Targets="Build" />
   </Target>
-<!--  <Target 
-    Name="ReBuild" 
-    Inputs="%(GenericTemplate-FileToGenerate.Template);%(GenericTemplate-FileToGenerate.Config)"
-    Outputs="%(GenericTemplate-FileToGenerate.Result)">
-  </Target> -->
-
 
 </Project>

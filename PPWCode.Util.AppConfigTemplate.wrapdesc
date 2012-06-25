@@ -4,6 +4,7 @@ build: files;
   file=build -> src\AppConfigTemplate.targets;
   file=build -> src\GenericTemplate.targets;
   file=build -> src\AppConfigGenerationProject.targets;
+  file=build -> src\RetrieveGeneratedTemplate.targets;
   file=. -> NOTICE;
   file=. -> LICENSE;
   file=. -> README;
