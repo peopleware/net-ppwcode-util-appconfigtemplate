@@ -36,9 +36,10 @@ limitations under the License.
 
   <!-- Visual Studio Build project -->
   <Target 
-    Name="Build" 
+    Name="Build"
+	DependsOnTargets="$(BuildDependsOn)"
     Inputs="%(GenericTemplate-FileToGenerate.Template);%(GenericTemplate-FileToGenerate.Config)"
-    Outputs="$(IntermediateOutputPath)%(GenericTemplate-FileToGenerate.Result);$(OutputPath)%(GenericTemplate-FileToGenerate.Result)">
+    Outputs="%(GenericTemplate-FileToGenerate.Result);$(IntermediateOutputPath)%(GenericTemplate-FileToGenerate.Result);$(OutputPath)%(GenericTemplate-FileToGenerate.Result)">
     
     <CallTarget Targets="TemplateGeneration" />
     <Copy 
