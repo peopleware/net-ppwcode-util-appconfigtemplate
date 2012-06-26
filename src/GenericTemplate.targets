@@ -38,7 +38,7 @@ limitations under the License.
 
     <XmlQuery 
         XmlFileName="%(GenericTemplate-FileToGenerate.Config)" 
-        XPath="//variables[@env='$(Configuration)']/var">
+        XPath="//var">
       <Output 
           TaskParameter="Values" 
           ItemName="ConfigurationValues" />
