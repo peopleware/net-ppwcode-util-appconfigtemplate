@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>PPWCode.Util.AppConfigTemplate</id>
+    <version>3.0.3</version>
+    <authors>Ruben Vandeginste</authors>
+    <owners>PeopleWare nv</owners>
+    <!--
+    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
+    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    -->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>AppConfigTemplate</description>
+    <releaseNotes>Nuget package.</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags></tags>
+    <dependencies>
+      <dependency id="MSBuild.Community.Tasks" version="[1.2.2]" />
+    </dependencies>
+  </metadata>
+
+  <!-- included files -->
+  <files>
+    <file src="src\*.targets" target="build" />
+    <file src="LICENSE" target="doc\LICENSE" />
+    <file src="NOTICE" target="doc\NOTICE" />
+    <file src="README" target="doc\README" />
+  </files>
+</package>

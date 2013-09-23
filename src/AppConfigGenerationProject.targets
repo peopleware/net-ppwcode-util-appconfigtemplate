@@ -21,7 +21,7 @@ limitations under the License.
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <!-- imports -->
-  <Import Project="..\..\MSBuild.Community.Tasks\build\MSBuild.Community.Tasks.targets" />
+  <Import Project="..\..\MSBuild.Community.Tasks.1.2.2\build\MSBuild.Community.Tasks.Targets" />
   <Import Project="GenericTemplate.targets" />
   
   <!-- Visual Studio Clean project -->
@@ -37,7 +37,7 @@ limitations under the License.
   <!-- Visual Studio Build project -->
   <Target 
     Name="Build"
-	DependsOnTargets="$(BuildDependsOn)"
+    DependsOnTargets="$(BuildDependsOn)"
     Inputs="%(GenericTemplate-FileToGenerate.Template);%(GenericTemplate-FileToGenerate.Config)"
     Outputs="%(GenericTemplate-FileToGenerate.Result);$(IntermediateOutputPath)%(GenericTemplate-FileToGenerate.Result);$(OutputPath)%(GenericTemplate-FileToGenerate.Result)">
     
