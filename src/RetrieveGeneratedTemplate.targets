@@ -58,8 +58,8 @@ limitations under the License.
 
        <PropertyGroup>
            <SelectedConfig>$(PPW-TemplateConfig)</SelectedConfig>
-           <SelectedConfig Condition="$(PPW-TemplateConfig) == '' ">%(GeneratedTemplate.Config)</SelectedConfig>
-           <SelectedConfig Condition="$(PPW-TemplateConfig) == '' And !Exists('%(GeneratedTemplate.Project)\$(SelectedConfig)-%(GeneratedTemplate.Origin)')">%(GeneratedTemplate.Default)</SelectedConfig>
+           <SelectedConfig Condition="$(PPW-TemplateConfig) == '' Or  '%(GeneratedTemplate.Config)' != 'user' ">%(GeneratedTemplate.Config)</SelectedConfig>
+           <SelectedConfig Condition="!Exists('%(GeneratedTemplate.Project)\$(SelectedConfig)-%(GeneratedTemplate.Origin)')">%(GeneratedTemplate.Default)</SelectedConfig>
        </PropertyGroup>
        
        <Message Text="Selected config: $(SelectedConfig)" />
